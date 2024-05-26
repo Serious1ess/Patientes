@@ -7,12 +7,12 @@
   <h2 class="articles__heading">القائمة</h2>
 
   <ul class="article-ul">
-    <% data.forEach(post => { %>
+    <% data.forEach(patient => { %>
     <li>
-      <a href="/post/<%= post._id %>">
-        <span><%= post.title %></span>
+      <a href="/patient/<%= patient._id %>">
+        <span><%= patient.firstName %> <%= patient.lastName %></span>
         <span class="article-list__date"
-          ><%= post.createdAt.toDateString() %></span
+          ><%= new Date(patient.createdAt).toLocaleDateString('ar-EG') %></span
         >
       </a>
     </li>

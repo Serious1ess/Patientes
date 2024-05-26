@@ -1,271 +1,247 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Post = require('../models/Post');
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const Post = require("../models/Post");
+const Patient = require("../models/Patient"); // Adjust the path as needed
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const adminLayout = '../views/layouts/admin';
+const adminLayout = "../views/layouts/admin";
 const jwtSecret = process.env.JWT_SECRET;
 
-
 /**
- * 
+ *
  * Check Login
-*/
-const authMiddleware = (req, res, next ) => {
+ */
+const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
 
-  if(!token) {
-    return res.status(401).json( { message: 'Unauthorized'} );
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   try {
     const decoded = jwt.verify(token, jwtSecret);
     req.userId = decoded.userId;
     next();
-  } catch(error) {
-    res.status(401).json( { message: 'Unauthorized'} );
+  } catch (error) {
+    res.status(401).json({ message: "Unauthorized" });
   }
-}
-
+};
 
 /**
  * GET /
  * Admin - Login Page
-*/
-router.get('/admin', async (req, res) => {
+ */
+router.get("/admin", async (req, res) => {
   try {
     const locals = {
       title: "Admin",
-      description: "Simple Blog created with NodeJs, Express & MongoDb."
-    }
+      description: "Simple Blog created with NodeJs, Express & MongoDb.",
+    };
 
-    res.render('admin/index', { locals, layout: adminLayout });
+    res.render("admin/index", { locals, layout: adminLayout });
   } catch (error) {
     console.log(error);
   }
 });
-
 
 /**
  * POST /
  * Admin - Check Login
-*/
-router.post('/admin', async (req, res) => {
+ */
+router.post("/admin", async (req, res) => {
   try {
     const { username, password } = req.body;
-    
-    const user = await User.findOne( { username } );
 
-    if(!user) {
-      return res.status(401).json( { message: 'Invalid credentials' } );
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if(!isPasswordValid) {
-      return res.status(401).json( { message: 'Invalid credentials' } );
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user._id}, jwtSecret );
-    res.cookie('token', token, { httpOnly: true });
-    res.redirect('/dashboard');
-
+    const token = jwt.sign({ userId: user._id }, jwtSecret);
+    res.cookie("token", token, { httpOnly: true });
+    res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
   }
 });
-
 
 /**
  * GET /
  * Admin Dashboard
-*/
-router.get('/dashboard', authMiddleware, async (req, res) => {
+ */
+router.get("/dashboard", authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: 'Dashboard',
-      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
-    }
+      title: "Dashboard",
+      description: "Simple Blog created with NodeJs, Express & MongoDb.",
+    };
 
-    const data = await Post.find();
-    res.render('admin/dashboard', {
+    const data = await Patient.find();
+    res.render("admin/dashboard", {
       locals,
       data,
-      layout: adminLayout
+      layout: adminLayout,
     });
-
   } catch (error) {
     console.log(error);
   }
-
 });
-
 
 /**
  * GET /
  * Admin - Create New Post
-*/
-router.get('/add-post', authMiddleware, async (req, res) => {
+ */
+router.get("/add-post", authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: 'Add Post',
-      description: 'Simple Blog created with NodeJs, Express & MongoDb.'
-    }
+      title: "Add Post",
+      description: "Simple Blog created with NodeJs, Express & MongoDb.",
+    };
 
     const data = await Post.find();
-    res.render('admin/add-post', {
+    res.render("admin/add-post", {
       locals,
-      layout: adminLayout
+      layout: adminLayout,
     });
-
   } catch (error) {
     console.log(error);
   }
-
 });
 
+// Assuming you have a Patient model similar to the one created earlier
+
+/**
+ * GET /
+ * Admin - Add New Patient
+ */
+router.get("/add-patient", authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: "Add Patient",
+      description:
+        "Patient Management System created with NodeJs, Express & MongoDb.",
+    };
+
+    res.render("admin/add-patient", {
+      locals,
+      layout: adminLayout,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 /**
  * POST /
- * Admin - Create New Post
-*/
-router.post('/add-post', authMiddleware, async (req, res) => {
+ * Admin - Add New Patient
+ */
+router.post("/add-patient", authMiddleware, async (req, res) => {
   try {
-    try {
-      const newPost = new Post({
-        title: req.body.title,
-        body: req.body.body
-      });
+    const newPatient = new Patient({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      contactNumber: req.body.contactNumber,
+      habitsAndInstincts: req.body.habitsAndInstincts,
+      medicalHistory: req.body.medicalHistory,
+      complaint: req.body.complaint,
+      diagnosis: req.body.diagnosis,
+      testsAndImaging: req.body.testsAndImaging,
+      treatment: req.body.treatment,
+      reviewDate: req.body.reviewDate,
+      followUp: req.body.followUp,
+    });
 
-      await Post.create(newPost);
-      res.redirect('/dashboard');
-    } catch (error) {
-      console.log(error);
-    }
-
+    await newPatient.save();
+    res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
   }
 });
-
 
 /**
  * GET /
- * Admin - Create New Post
-*/
-router.get('/edit-post/:id', authMiddleware, async (req, res) => {
+ * Admin - Edit Patient
+ */
+router.get("/edit-patient/:id", authMiddleware, async (req, res) => {
   try {
-
     const locals = {
-      title: "Edit Post",
-      description: "Free NodeJs User Management System",
+      title: "Edit Patient",
+      description: "Patient Management System",
     };
 
-    const data = await Post.findOne({ _id: req.params.id });
+    const data = await Patient.findOne({ _id: req.params.id });
 
-    res.render('admin/edit-post', {
+    res.render("admin/edit-patient", {
       locals,
       data,
-      layout: adminLayout
-    })
-
+      layout: adminLayout,
+    });
   } catch (error) {
     console.log(error);
   }
-
 });
-
 
 /**
  * PUT /
- * Admin - Create New Post
-*/
-router.put('/edit-post/:id', authMiddleware, async (req, res) => {
+ * Admin - Edit Patient
+ */
+router.put("/edit-patient/:id", authMiddleware, async (req, res) => {
   try {
-
-    await Post.findByIdAndUpdate(req.params.id, {
-      title: req.body.title,
-      body: req.body.body,
-      updatedAt: Date.now()
+    await Patient.findByIdAndUpdate(req.params.id, {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      contactNumber: req.body.contactNumber,
+      habitsAndInstincts: req.body.habitsAndInstincts,
+      medicalHistory: req.body.medicalHistory,
+      complaint: req.body.complaint,
+      diagnosis: req.body.diagnosis,
+      testsAndImaging: req.body.testsAndImaging,
+      treatment: req.body.treatment,
+      reviewDate: req.body.reviewDate,
+      followUp: req.body.followUp,
+      updatedAt: Date.now(),
     });
 
-    res.redirect(`/edit-post/${req.params.id}`);
-
-  } catch (error) {
-    console.log(error);
-  }
-
-});
-
-
-// router.post('/admin', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
-    
-//     if(req.body.username === 'admin' && req.body.password === 'password') {
-//       res.send('You are logged in.')
-//     } else {
-//       res.send('Wrong username or password');
-//     }
-
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
-
-/**
- * POST /
- * Admin - Register
-*/
-router.post('/register', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    try {
-      const user = await User.create({ username, password:hashedPassword });
-      res.status(201).json({ message: 'User Created', user });
-    } catch (error) {
-      if(error.code === 11000) {
-        res.status(409).json({ message: 'User already in use'});
-      }
-      res.status(500).json({ message: 'Internal server error'})
-    }
-
+    res.redirect(`/edit-patient/${req.params.id}`);
   } catch (error) {
     console.log(error);
   }
 });
-
 
 /**
  * DELETE /
- * Admin - Delete Post
-*/
-router.delete('/delete-post/:id', authMiddleware, async (req, res) => {
-
+ * Admin - Delete Patient
+ */
+router.delete("/delete-patient/:id", authMiddleware, async (req, res) => {
   try {
-    await Post.deleteOne( { _id: req.params.id } );
-    res.redirect('/dashboard');
+    await Patient.deleteOne({ _id: req.params.id });
+    res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
   }
-
 });
-
 
 /**
  * GET /
  * Admin Logout
-*/
-router.get('/logout', (req, res) => {
-  res.clearCookie('token');
+ */
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
   //res.json({ message: 'Logout successful.'});
-  res.redirect('/');
+  res.redirect("/");
 });
-
 
 module.exports = router;

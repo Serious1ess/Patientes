@@ -1,0 +1,52 @@
+<h1><%= data.firstName %> <%= data.lastName %></h1>
+<article class="article">
+  <div class="info-container">
+    <div class="info-box">
+      <strong>تاريخ الميلاد:</strong>
+      <p><%= new Date(data.dateOfBirth).toLocaleDateString('ar-EG') %></p>
+    </div>
+    <div class="info-box">
+      <strong>الجنس:</strong>
+      <p><%= data.gender %></p>
+    </div>
+    <div class="info-box">
+      <strong>رقم الاتصال:</strong>
+      <p><%= data.contactNumber %></p>
+    </div>
+    <div class="info-box">
+      <strong>العادات والغرائز:</strong>
+      <p><%= data.habitsAndInstincts %></p>
+    </div>
+    <div class="info-box">
+      <strong>السوابق المرضية:</strong>
+      <p><%= data.medicalHistory %></p>
+    </div>
+    <div class="info-box">
+      <strong>الشكاية:</strong>
+      <p><%= data.complaint %></p>
+    </div>
+    <div class="info-box">
+      <strong>التشخيص:</strong>
+      <p><%= data.diagnosis %></p>
+    </div>
+    <div class="info-box">
+      <strong>التحاليل والاشعة:</strong>
+      <p><%= data.testsAndImaging %></p>
+    </div>
+    <div class="info-box">
+      <strong>العلاج:</strong>
+      <p><%= data.treatment %></p>
+    </div>
+    <div class="info-box">
+      <strong>تاريخ المراجعة:</strong>
+      <p>
+        <%= data.reviewDate ? new
+        Date(data.reviewDate).toLocaleDateString('ar-EG') : '' %>
+      </p>
+    </div>
+    <div class="info-box">
+      <strong>المتابعة:</strong>
+      <p><%= data.followUp %></p>
+    </div>
+  </div>
+</article>

@@ -1,21 +1,24 @@
 <div class="admin-title">
   <h2>قائمة المرضى</h2>
-  <a href="/add-post" class="button">+ اضافة</a>
+  <a href="/add-patient" class="button">+ اضافة</a>
 </div>
 
 <ul class="admin-posts">
-  <% data.forEach(post => { %>
-
+  <% data.forEach(patient => { %>
   <li>
-    <a href="/post/<%= post._id %>"> <%= post.title %> &nearr; </a>
+    <a href="/patient/<%= patient._id %>">
+      <%= patient.firstName %> <%= patient.lastName %> &nearr;
+    </a>
     <div class="admin-post-controls">
-      <a href="/edit-post/<%= post._id %>" class="btn">تعديل</a>
+      <a href="/edit-patient/<%= patient._id %>" class="btn">تعديل</a>
 
-      <form action="/delete-post/<%= post._id %>?_method=DELETE" method="POST">
+      <form
+        action="/delete-patient/<%= patient._id %>?_method=DELETE"
+        method="POST"
+      >
         <input type="submit" value="حذف" class="btn-delete btn" />
       </form>
     </div>
   </li>
-
   <% }) %>
 </ul>

@@ -1,0 +1,82 @@
+<a href="/dashboard">&larr; رجوع</a>
+<div class="admin-title">
+  <h2>تحديث معلومات المريض</h2>
+
+  <form action="/delete-patient/<%= data._id %>?_method=DELETE" method="POST">
+    <input type="submit" value="حذف" class="btn-delete btn" />
+  </form>
+</div>
+
+<form action="/edit-patient/<%= data._id %>?_method=PUT" method="POST">
+  <label for="firstName"><b>الاسم الأول</b></label>
+  <input
+    type="text"
+    placeholder="الاسم الأول"
+    name="firstName"
+    value="<%= data.firstName %>"
+    required
+  />
+
+  <label for="lastName"><b>اسم العائلة</b></label>
+  <input
+    type="text"
+    placeholder="اسم العائلة"
+    name="lastName"
+    value="<%= data.lastName %>"
+    required
+  />
+
+  <label for="dateOfBirth"><b>تاريخ الميلاد</b></label>
+  <input
+    type="date"
+    name="dateOfBirth"
+    value="<%= new Date(data.dateOfBirth).toISOString().split('T')[0] %>"
+    required
+  />
+
+  <label for="gender"><b>الجنس</b></label>
+  <select name="gender" required>
+    <option value="Male" <%= data.gender === 'Male' ? 'selected' : '' %>>ذكر</option>
+    <option value="Female" <%= data.gender === 'Female' ? 'selected' : '' %>>أنثى</option>
+    <option value="Other" <%= data.gender === 'Other' ? 'selected' : '' %>>آخر</option>
+  </select>
+
+  <label for="contactNumber"><b>رقم الاتصال</b></label>
+  <input
+    type="text"
+    placeholder="رقم الاتصال"
+    name="contactNumber"
+    value="<%= data.contactNumber %>"
+    required
+  />
+
+  <label for="habitsAndInstincts"><b>العادات والغرائز</b></label>
+  <textarea name="habitsAndInstincts" placeholder="العادات والغرائز" cols="50" rows="5"><%= data.habitsAndInstincts %></textarea>
+
+  <label for="medicalHistory"><b>السوابق المرضية</b></label>
+  <textarea name="medicalHistory" placeholder="السوابق المرضية" cols="50" rows="5"><%= data.medicalHistory %></textarea>
+
+  <label for="complaint"><b>الشكاية</b></label>
+  <textarea name="complaint" placeholder="الشكاية" cols="50" rows="5"><%= data.complaint %></textarea>
+
+  <label for="diagnosis"><b>التشخيص</b></label>
+  <textarea name="diagnosis" placeholder="التشخيص" cols="50" rows="5"><%= data.diagnosis %></textarea>
+
+  <label for="testsAndImaging"><b>التحاليل والاشعة</b></label>
+  <textarea name="testsAndImaging" placeholder="التحاليل والاشعة" cols="50" rows="5"><%= data.testsAndImaging %></textarea>
+
+  <label for="treatment"><b>العلاج</b></label>
+  <textarea name="treatment" placeholder="العلاج" cols="50" rows="5"><%= data.treatment %></textarea>
+
+  <label for="reviewDate"><b>تاريخ المراجعة</b></label>
+  <input
+    type="date"
+    name="reviewDate"
+    value="<%= new Date(data.reviewDate).toISOString().split('T')[0] %>"
+  />
+
+  <label for="followUp"><b>المتابعة</b></label>
+  <textarea name="followUp" placeholder="المتابعة" cols="50" rows="5"><%= data.followUp %></textarea>
+
+  <input type="submit" value="تحديث" class="btn" />
+</form>
