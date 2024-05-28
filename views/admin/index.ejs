@@ -1,22 +1,27 @@
-<h3>تسجيل الدخول</h3>
+<div class="loginForm" id="loginForm" style="display: none">
+  <h3>تسجيل الدخول</h3>
+  <form action="/admin" method="POST">
+    <label for="username"><b>اسم حساب الطبيب</b></label>
+    <input type="text" placeholder="ادخل حساب المستخدم" name="username" />
 
-<form action="/admin" method="POST">
-  <label for="username"><b>اسم حساب الطبيب</b></label>
-  <input type="text" placeholder="ادخل حساب المستخدم" name="username" />
+    <label for="password"><b>كلمة المرور</b></label>
+    <input type="password" placeholder="ادخل كلمة المرور" name="password" />
 
-  <label for="password"><b>كلمة المرور</b></label>
-  <input type="password" placeholder="ادخل كلمة المرور" name="password" />
+    <input type="submit" value="تسجيل الدخول" class="btn" />
+    <input type="button" value="انشاء حساب" class="btn" id="registerBtn" />
+  </form>
+</div>
 
-  <input type="submit" value="تسجيل الدخول" class="btn" />
-</form>
+<div class="registerForm" id="registerForm" style="display: none">
+  <h3>انشاء حساب</h3>
+  <form action="/register" method="POST">
+    <label for="username"><b>اسم حساب الطبيب</b></label>
+    <input type="text" placeholder="ادخل حساب المستخدم" name="username" />
 
-<h3>Register</h3>
-<form action="/register" method="POST">
-  <label for="username"><b>اسم حساب الطبيب</b></label>
-  <input type="text" placeholder="ادخل حساب المستخدم" name="username" />
+    <label for="password"><b>كلمة المرور</b></label>
+    <input type="password" placeholder="ادخل كلمة المرور" name="password" />
 
-  <label for="password"><b>كلمة المرور</b></label>
-  <input type="password" placeholder="ادخل كلمة المرور" name="password" />
-
-  <input type="submit" value="Register" class="btn" />
-</form>
+    <input type="submit" value="انشاء حساب" class="btn" />
+    <input type="button" value="تسجيل الدخول" id="loginBtn" class="btn" />
+  </form>
+</div>

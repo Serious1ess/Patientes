@@ -14,7 +14,7 @@
     placeholder="الاسم الأول"
     name="firstName"
     value="<%= data.firstName %>"
-    required
+     
   />
 
   <label for="lastName"><b>اسم العائلة</b></label>
@@ -23,7 +23,7 @@
     placeholder="اسم العائلة"
     name="lastName"
     value="<%= data.lastName %>"
-    required
+     
   />
 
   <label for="dateOfBirth"><b>تاريخ الميلاد</b></label>
@@ -31,11 +31,11 @@
     type="date"
     name="dateOfBirth"
     value="<%= new Date(data.dateOfBirth).toISOString().split('T')[0] %>"
-    required
+     
   />
 
   <label for="gender"><b>الجنس</b></label>
-  <select name="gender" required>
+  <select name="gender"  >
     <option value="Male" <%= data.gender === 'Male' ? 'selected' : '' %>>ذكر</option>
     <option value="Female" <%= data.gender === 'Female' ? 'selected' : '' %>>أنثى</option>
     <option value="Other" <%= data.gender === 'Other' ? 'selected' : '' %>>آخر</option>
@@ -47,7 +47,7 @@
     placeholder="رقم الاتصال"
     name="contactNumber"
     value="<%= data.contactNumber %>"
-    required
+     
   />
 
   <label for="habitsAndInstincts"><b>العادات والغرائز</b></label>

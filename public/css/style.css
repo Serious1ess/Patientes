@@ -17,8 +17,8 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--black);
   font-size: var(--font-size-base);
-  background-color: #faf5ee;
-  background-image: url("/img/img-noise-361x370.png");
+  background-color: #ccd9df;
+  background-image: url("/img/61804.jpg");
   margin: 0;
 }
 
@@ -39,6 +39,7 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="search"],
+input[type="date"],
 select,
 textarea {
   font-family: "Poppins", sans-serif;
@@ -62,7 +63,7 @@ textarea {
 
 .btn-delete {
   padding: 10px 16px;
-  background-color: var(--red);
+  background-color: var(--red) !important;
 }
 
 img {
@@ -277,6 +278,7 @@ img {
 .admin-posts {
   padding: 0;
   margin: 0;
+  font-size: 25px;
 }
 
 .admin-post-controls form {
@@ -292,6 +294,8 @@ img {
   font-size: 0.8rem;
   padding: 4px 8px;
   line-height: 2;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 .admin-posts li {
@@ -353,6 +357,7 @@ img {
   background-color: #f9f9f9;
   flex: 1 1 calc(50% - 20px);
   box-sizing: border-box;
+  font-size: 25px;
 }
 
 .info-box strong {

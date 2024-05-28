@@ -2,26 +2,31 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 const PatientSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   firstName: {
     type: String,
     required: true,
   },
   lastName: {
     type: String,
-    required: true,
+    required: false,
   },
   dateOfBirth: {
     type: Date,
-    required: true,
+    required: false,
   },
   gender: {
     type: String,
     enum: ["Male", "Female", "Other"],
-    required: true,
+    required: false,
   },
   contactNumber: {
     type: String,
-    required: true,
+    required: false,
   },
   habitsAndInstincts: {
     type: String,
