@@ -33,7 +33,7 @@ const authMiddleware = (req, res, next) => {
  * GET /
  * Admin - Login Page
  */
-router.get("/admin", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const locals = {
       title: "Admin",

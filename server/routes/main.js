@@ -7,7 +7,7 @@ const Patient = require("../models/Patient");
  * GET /
  * HOME
  */
-router.get("/", async (req, res) => {
+router.get("/main", async (req, res) => {
   try {
     const locals = {
       title: "Patients",

@@ -55,15 +55,19 @@ textarea {
   background-color: var(--black);
   border: none;
   color: white;
-  padding: 16px 32px;
+  padding: 10px;
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
 }
 
 .btn-delete {
-  padding: 10px 16px;
+  padding: 10px;
   background-color: var(--red) !important;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
 }
 
 img {
@@ -114,10 +118,6 @@ img {
   font-size: 25px;
   text-decoration: none;
   grid-area: logo;
-}
-
-.header__logo:hover {
-  text-decoration: underline;
 }
 
 .header__nav {

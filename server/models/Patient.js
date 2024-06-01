@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const Schema = mongoose.Schema;
+// Define the Patient schema
 const PatientSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
@@ -69,5 +70,30 @@ const PatientSchema = new Schema({
     default: Date.now,
   },
 });
+
+// Virtual for formatted date
+PatientSchema.virtual("formattedDateOfBirth").get(function () {
+  return this.dateOfBirth ? this.dateOfBirth.toLocaleDateString("en-GB") : "";
+});
+
+PatientSchema.virtual("formattedReviewDate").get(function () {
+  return this.reviewDate ? this.reviewDate.toLocaleDateString("en-GB") : "";
+});
+
+PatientSchema.virtual("formattedCreatedAt").get(function () {
+  return this.createdAt ? this.createdAt.toLocaleDateString("en-GB") : "";
+});
+
+PatientSchema.virtual("formattedUpdatedAt").get(function () {
+  return this.updatedAt ? this.updatedAt.toLocaleDateString("en-GB") : "";
+});
+PatientSchema.virtual("translatedGender").get(function () {
+  if (this.gender == "Male") return (this.gender = "ذكر");
+  if (this.gender == "Female") return (this.gender = "انثى");
+  if (this.gender == "Other") return (this.gender = "اخر");
+});
+
+// Ensure virtual fields are included in JSON output
+PatientSchema.set("toJSON", { virtuals: true });
 
 module.exports = mongoose.model("Patient", PatientSchema);

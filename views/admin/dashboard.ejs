@@ -1,24 +1,113 @@
-<div class="admin-title">
-  <h2>قائمة المرضى</h2>
-  <a href="/add-patient" class="button">+ اضافة</a>
-</div>
-
-<ul class="admin-posts">
-  <% data.forEach(patient => { %>
-  <li>
-    <a href="/patient/<%= patient._id %>">
-      <%= patient.firstName %> <%= patient.lastName %> &nearr;
-    </a>
-    <div class="admin-post-controls">
-      <a href="/edit-patient/<%= patient._id %>" class="btn">تعديل</a>
-
-      <form
-        action="/delete-patient/<%= patient._id %>?_method=DELETE"
-        method="POST"
-      >
-        <input type="submit" value="حذف" class="btn-delete btn" />
-      </form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= locals.title %></title>
+    <meta name="description" content="<%= locals.description %>" />
+    <!-- Include AG Grid CSS -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css"
+    /> -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css"
+    /> -->
+    <!-- Include your custom CSS if needed -->
+  </head>
+  <body>
+    <div class="admin-title">
+      <h2>قائمة المرضى</h2>
+      <a href="/add-patient" class="button">+ اضافة</a>
     </div>
-  </li>
-  <% }) %>
-</ul>
+
+    <!-- AG Grid Container -->
+    <div id="myGrid" class="ag-theme-alpine" style="height: 600px"></div>
+
+    <!-- Include AG Grid JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-charts-enterprise@31.3.2/dist/ag-grid-charts-enterprise.js?t=1715777160896"></script>
+    <script src="/js/AgGridTranslation.js"></script>
+
+    <script>
+
+                   document.addEventListener('DOMContentLoaded', function() {
+
+                   getPatientsGridTable( <%- JSON.stringify(data) %>)
+                    document.querySelector(".LogoutBtn").style.display = '';
+                   });
+
+                   function getPatientsGridTable(data){
+                      var columnDefs = [
+                       { headerName: "اسم الاول", field: "firstName",filter: "agSetColumnFilter" },
+                       { headerName: "اسم العائلة", field: "lastName" ,filter: "agSetColumnFilter" },
+                       { headerName: "الجنس", field: "translatedGender" ,filter: "agSetColumnFilter" },
+                       { headerName: "الشكاية ", field: "complaint" ,filter: "agSetColumnFilter"},
+                       { headerName: "تاريخ المراجعة", field: "formattedReviewDate" ,  filter: "agDateColumnFilter", },
+                       {
+                        headerName: "التحكم",
+                        field: "control",
+                        cellRenderer: function(params) {
+                          return `
+                            <a href="/edit-patient/${params.data._id}" class="btn">تعديل</a>
+                            <a class="btn btn-delete" onclick="deletePatient('${params.data._id}')">حذف</a>
+                          `;
+                        },
+                        sortable: false,
+                        filter: false,
+                        minWidth: 200,
+                      }
+                     ];
+
+                     // Convert server-side data to a valid JavaScript array of objects
+                     var rowData = data
+
+                     var gridOptions = {
+                       columnDefs: columnDefs,
+                       rowData: rowData,
+                       enableRtl:  true,
+                       defaultColDef: {
+                 enableRtl: true,
+                 enableRowGroup: true,
+                 enablePivot: true,
+                 enableValue: true,
+                 sortable: true,
+                 resizable: true,
+                 filter: true,
+                 flex: 1,
+                 minWidth: 10,
+               },
+              localeText : $AG_GRID_LOCALE_AR,
+                     enableCharts: true,
+                     animateRows: true,
+                 enableRangeSelection: true,
+                 onRowDoubleClicked: onRowDoubleClicked,
+                   }
+
+                     var eGridDiv = document.querySelector('#myGrid');
+                     new agGrid.Grid(eGridDiv, gridOptions);
+                    }
+        function onRowDoubleClicked(event) {
+        var patientId = event.data._id;
+        window.location.href = `/patient/${patientId}`;
+      }
+      function deletePatient(id) {
+            if (confirm('هل أنت متأكد أنك تريد حذف هذا المريض؟')) {
+              fetch(`/delete-patient/${id}?_method=DELETE`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+              })
+              .then(response => {
+                if (response.ok) {
+                  location.reload();
+                } else {
+                  alert('Failed to delete patient');
+                }
+              });
+            }
+          }
+    </script>
+  </body>
+</html>

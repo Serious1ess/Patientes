@@ -37,13 +37,13 @@ app.use(express.static("public"));
 
 // Templating Engine
 app.use(expressLayout);
-app.set("layout", "./layouts/main");
+app.set("layout", "./layouts/admin");
 app.set("view engine", "ejs");
 
 app.locals.isActiveRoute = isActiveRoute;
 
-app.use("/", require("./server/routes/main"));
-app.use("/", require("./server/routes/admin"));
+app.use("/", require("./server/routes/admin")); // Set admin routes to be the default
+app.use("/", require("./server/routes/main")); // Set main routes
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
